@@ -16,9 +16,11 @@ public class MouseLook : MonoBehaviour
     // rotation axis
     public RotationAxes axes = RotationAxes.MouseX;
 
-    // rotation sensitivity
-    public float ScalesensitivityHor = 9.0f;
-    public float ScalesensitivityVert = 9.0f;
+    // Scale (1-10) rotation sensitivity
+    [Range(0f, 10f)]
+    [SerializeField] public float ScalesensitivityHor = 9.0f;
+    [Range(0f, 10f)]
+    [SerializeField] public float ScalesensitivityVert = 9.0f;
 
     private float sensitivityHor;
     private float sensitivityVert;
@@ -54,7 +56,9 @@ public class MouseLook : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // read the look action value via a Vector2 object
         Vector2 LookVector = LookAction.ReadValue<Vector2>();
+
         // yaw only
         if (axes == RotationAxes.MouseX)
         {

@@ -6766,10 +6766,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d6c2e6f806728c4409e995cd98193216, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMotor
-  walkSpeed: 10
+  walkSpeed: 5
   airControl: 0.4
   gravity: -22
-  jumpSpeed: 8
+  jumpHeight: 3
   maxJumps: 1
   coyoteTime: 0.12
   hardLandingSpeed: 14
