@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="15.1">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>40</x>
+      <y>270</y>
+      <w>360</w>
+      <h>410</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Stereotype&gt;&gt;
+**FPSMovement**
+--
+-walkSpeed: float
+-airControl: float
+-gravity: float
+-jumpSpeed: float
+-maxJumps: int
+-coyoteTime: float
+-hardLandingSpeed: float
+-onHardLanding: UnityEvent&lt;float&gt;
+-maxFallSpeed: float
+-CharCont: CharacterController
+-jumpsUsed: int
+-lastGroundedTime: float
+-wasGroundedLastFrame: bool
++IsGrounded: bool
++VerticalVelocity: float
+--
+-Awake(): void
+-Update(): void
+-ReadMoveInput(): Vector2
+-UpdateGroundState(): void
+-HandleJumpInput(): void
+-ApplyGravity(): void
+-BuildMovement(): Vector3
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>60</x>
+      <y>130</y>
+      <w>150</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>CharacterController</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>260</x>
+      <y>130</y>
+      <w>110</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>UnityEvent&lt;&gt;</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>120</x>
+      <y>150</y>
+      <w>30</w>
+      <h>140</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;120.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>300</x>
+      <y>150</y>
+      <w>30</w>
+      <h>140</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;120.0;10.0;10.0</additional_attributes>
+  </element>
+</diagram>
