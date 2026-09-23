@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <diagram program="umlet" version="15.1">
-  <zoom_level>7</zoom_level>
+  <zoom_level>15</zoom_level>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>91</x>
-      <y>259</y>
-      <w>217</w>
-      <h>308</h>
+      <x>195</x>
+      <y>285</y>
+      <w>465</w>
+      <h>660</h>
     </coordinates>
     <panel_attributes>&lt;&lt;Stereotype&gt;&gt;
 **Player Motor**
@@ -43,10 +43,10 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>105</x>
-      <y>126</y>
-      <w>105</w>
-      <h>21</h>
+      <x>225</x>
+      <y>0</y>
+      <w>225</w>
+      <h>45</h>
     </coordinates>
     <panel_attributes>CharacterController</panel_attributes>
     <additional_attributes/>
@@ -54,10 +54,10 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>245</x>
-      <y>126</y>
-      <w>77</w>
-      <h>21</h>
+      <x>525</x>
+      <y>0</y>
+      <w>165</w>
+      <h>45</h>
     </coordinates>
     <panel_attributes>UnityEvent&lt;&gt;</panel_attributes>
     <additional_attributes/>
@@ -65,10 +65,10 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>182</x>
-      <y>140</y>
-      <w>21</w>
-      <h>133</h>
+      <x>390</x>
+      <y>30</y>
+      <w>45</w>
+      <h>285</h>
     </coordinates>
     <panel_attributes>lt=&lt;-</panel_attributes>
     <additional_attributes>10.0;170.0;10.0;10.0</additional_attributes>
@@ -76,10 +76,10 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>273</x>
-      <y>140</y>
-      <w>21</w>
-      <h>133</h>
+      <x>585</x>
+      <y>30</y>
+      <w>45</w>
+      <h>285</h>
     </coordinates>
     <panel_attributes>lt=&lt;-</panel_attributes>
     <additional_attributes>10.0;170.0;10.0;10.0</additional_attributes>
@@ -87,10 +87,10 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>329</x>
-      <y>259</y>
-      <w>133</w>
-      <h>196</h>
+      <x>705</x>
+      <y>285</y>
+      <w>285</w>
+      <h>420</h>
     </coordinates>
     <panel_attributes>&lt;&lt;Stereotype&gt;&gt;
 **Mouse Look**
@@ -114,10 +114,10 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>392</x>
-      <y>126</y>
-      <w>77</w>
-      <h>21</h>
+      <x>840</x>
+      <y>0</y>
+      <w>165</w>
+      <h>45</h>
     </coordinates>
     <panel_attributes>InputAction</panel_attributes>
     <additional_attributes/>
@@ -125,10 +125,10 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>420</x>
-      <y>140</y>
-      <w>21</w>
-      <h>133</h>
+      <x>900</x>
+      <y>30</y>
+      <w>45</w>
+      <h>285</h>
     </coordinates>
     <panel_attributes>lt=&lt;-</panel_attributes>
     <additional_attributes>10.0;170.0;10.0;10.0</additional_attributes>
@@ -136,10 +136,10 @@
   <element>
     <id>UMLGeneric</id>
     <coordinates>
-      <x>35</x>
-      <y>203</y>
-      <w>504</w>
-      <h>525</h>
+      <x>75</x>
+      <y>165</y>
+      <w>1080</w>
+      <h>1125</h>
     </coordinates>
     <panel_attributes>Player Movement Classes
 halign=left</panel_attributes>
@@ -148,10 +148,10 @@ halign=left</panel_attributes>
   <element>
     <id>UMLGeneric</id>
     <coordinates>
-      <x>546</x>
-      <y>203</y>
-      <w>196</w>
-      <h>294</h>
+      <x>1170</x>
+      <y>165</y>
+      <w>480</w>
+      <h>720</h>
     </coordinates>
     <panel_attributes>Player Shooting Class
 halign=left</panel_attributes>
@@ -160,47 +160,55 @@ halign=left</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>567</x>
-      <y>252</y>
-      <w>147</w>
-      <h>196</h>
+      <x>1215</x>
+      <y>285</y>
+      <w>390</w>
+      <h>570</h>
     </coordinates>
     <panel_attributes>&lt;&lt;Stereotype&gt;&gt;
 **Shotgun**
 --
 -Ammo: int
 -CooldownBetweenShots: float
+-TimeOfLastShot: float
 -Damage: float
+-NumberOfPellets: int
+-Deviation: float
 -ShootAction: InputAction
--ShotgunPrefab: Prefab
++ShotgunPrefab: GameObject
++particleSysPrefab: GameObject
++camera: Camera
 
 --
 -Start(): void
+-SetPrefab(): void
 -Update(): void
 -Shoot(): void
 -EmptyShoot(): void
+-Bang(): void
+-GeneratePS(RaycastHit): IEnumerator
 -MinusAmmo(): void
--AddAmmo(int): void</panel_attributes>
++AddAmmo(int): void</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>441</x>
-      <y>140</y>
-      <w>245</w>
-      <h>126</h>
+      <x>945</x>
+      <y>30</y>
+      <w>525</w>
+      <h>285</h>
     </coordinates>
     <panel_attributes>lt=&lt;-</panel_attributes>
-    <additional_attributes>330.0;160.0;330.0;50.0;10.0;50.0;10.0;10.0</additional_attributes>
+    <additional_attributes>330.0;170.0;330.0;50.0;10.0;50.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>91</x>
-      <y>595</y>
-      <w>231</w>
-      <h>98</h>
+      <x>195</x>
+      <y>1005</y>
+      <w>495</w>
+      <h>210</h>
     </coordinates>
     <panel_attributes>&lt;&lt;Stereotype&gt;&gt;
 **Rigidbody Pusher**
@@ -216,9 +224,9 @@ halign=left</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>0</x>
-      <y>126</y>
-      <w>119</w>
-      <h>525</h>
+      <y>0</y>
+      <w>255</w>
+      <h>1125</h>
     </coordinates>
     <panel_attributes>lt=&lt;-</panel_attributes>
     <additional_attributes>130.0;730.0;10.0;730.0;10.0;10.0;150.0;10.0</additional_attributes>

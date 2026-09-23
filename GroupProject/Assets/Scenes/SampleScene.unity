@@ -2350,6 +2350,7 @@ GameObject:
   - component: {fileID: 330585544}
   - component: {fileID: 330585547}
   - component: {fileID: 330585548}
+  - component: {fileID: 330585549}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -2492,6 +2493,26 @@ MonoBehaviour:
   ScalesensitivityVert: 9
   minimumVert: -45
   maximumVert: 45
+--- !u!114 &330585549
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 330585543}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e6333b1afc8d3746828b42a352ad40b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Shotgun
+  Ammo: 6
+  CooldownBetweenShots: 1
+  Damage: 5
+  NumberOfPellets: 12
+  Deviation: 40
+  ShotgunPrefab: {fileID: 6747371014725939774, guid: 9a940190f46c20042a5a4541b1e7d09b, type: 3}
+  particleSysPrefab: {fileID: 781574001263335369, guid: f864bdf9e411fc94d9e1c9b61b712e93, type: 3}
+  camera: {fileID: 330585545}
 --- !u!1 &331693871
 GameObject:
   m_ObjectHideFlags: 0
