@@ -1,27 +1,28 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <diagram program="umlet" version="15.1">
-  <zoom_level>10</zoom_level>
+  <zoom_level>7</zoom_level>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>40</x>
-      <y>270</y>
-      <w>360</w>
-      <h>410</h>
+      <x>91</x>
+      <y>259</y>
+      <w>217</w>
+      <h>308</h>
     </coordinates>
     <panel_attributes>&lt;&lt;Stereotype&gt;&gt;
-**FPSMovement**
+**Player Motor**
 --
 -walkSpeed: float
 -airControl: float
 -gravity: float
 -jumpSpeed: float
+-jumpHeight: float
 -maxJumps: int
 -coyoteTime: float
 -hardLandingSpeed: float
 -onHardLanding: UnityEvent&lt;float&gt;
 -maxFallSpeed: float
--CharCont: CharacterController
+-controller: CharacterController
 -jumpsUsed: int
 -lastGroundedTime: float
 -wasGroundedLastFrame: bool
@@ -35,16 +36,17 @@
 -HandleJumpInput(): void
 -ApplyGravity(): void
 -BuildMovement(): Vector3
+-CalculateJumpSpeed(): float
 </panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>60</x>
-      <y>130</y>
-      <w>150</w>
-      <h>30</h>
+      <x>105</x>
+      <y>126</y>
+      <w>105</w>
+      <h>21</h>
     </coordinates>
     <panel_attributes>CharacterController</panel_attributes>
     <additional_attributes/>
@@ -52,10 +54,10 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>260</x>
-      <y>130</y>
-      <w>110</w>
-      <h>30</h>
+      <x>245</x>
+      <y>126</y>
+      <w>77</w>
+      <h>21</h>
     </coordinates>
     <panel_attributes>UnityEvent&lt;&gt;</panel_attributes>
     <additional_attributes/>
@@ -63,23 +65,162 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>120</x>
-      <y>150</y>
-      <w>30</w>
-      <h>140</h>
+      <x>182</x>
+      <y>140</y>
+      <w>21</w>
+      <h>133</h>
     </coordinates>
     <panel_attributes>lt=&lt;-</panel_attributes>
-    <additional_attributes>10.0;120.0;10.0;10.0</additional_attributes>
+    <additional_attributes>10.0;170.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>300</x>
-      <y>150</y>
-      <w>30</w>
-      <h>140</h>
+      <x>273</x>
+      <y>140</y>
+      <w>21</w>
+      <h>133</h>
     </coordinates>
     <panel_attributes>lt=&lt;-</panel_attributes>
-    <additional_attributes>10.0;120.0;10.0;10.0</additional_attributes>
+    <additional_attributes>10.0;170.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>329</x>
+      <y>259</y>
+      <w>133</w>
+      <h>196</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Stereotype&gt;&gt;
+**Mouse Look**
+--
++RotationAxes: enum
++axes: RotationAxes
++ScalesensitivityHor: float
++ScalesensitivityVert: float
+-sensitivityHor: float
+-sensitivityVert: float
++minimumVert: float
++maximumVert: float
+-verticalRot: float
+-LookAction: InputAction
+
+--
+-Start(): void
+-Update(): void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>392</x>
+      <y>126</y>
+      <w>77</w>
+      <h>21</h>
+    </coordinates>
+    <panel_attributes>InputAction</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>420</x>
+      <y>140</y>
+      <w>21</w>
+      <h>133</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;170.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>35</x>
+      <y>203</y>
+      <w>504</w>
+      <h>525</h>
+    </coordinates>
+    <panel_attributes>Player Movement Classes
+halign=left</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>546</x>
+      <y>203</y>
+      <w>196</w>
+      <h>294</h>
+    </coordinates>
+    <panel_attributes>Player Shooting Class
+halign=left</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>567</x>
+      <y>252</y>
+      <w>147</w>
+      <h>196</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Stereotype&gt;&gt;
+**Shotgun**
+--
+-Ammo: int
+-CooldownBetweenShots: float
+-Damage: float
+-ShootAction: InputAction
+-ShotgunPrefab: Prefab
+
+--
+-Start(): void
+-Update(): void
+-Shoot(): void
+-EmptyShoot(): void
+-MinusAmmo(): void
+-AddAmmo(int): void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>441</x>
+      <y>140</y>
+      <w>245</w>
+      <h>126</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>330.0;160.0;330.0;50.0;10.0;50.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>91</x>
+      <y>595</y>
+      <w>231</w>
+      <h>98</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Stereotype&gt;&gt;
+**Rigidbody Pusher**
+--
+-pushForce: float
+-pushableLayers: LayerMask
+-ignoreDownwardPushes: bool
+--
+-OnControllerColliderHit(ControllerColliderHit): void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>0</x>
+      <y>126</y>
+      <w>119</w>
+      <h>525</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>130.0;730.0;10.0;730.0;10.0;10.0;150.0;10.0</additional_attributes>
   </element>
 </diagram>
