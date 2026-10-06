@@ -1,3 +1,5 @@
+using System.ComponentModel;
+using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
@@ -27,9 +29,11 @@ public class PlayerMotor : MonoBehaviour
     [Header("Jumping")]
     [Tooltip("Downward acceleration. Stronger than real gravity so the arc feels tight rather than floaty.")]
     [SerializeField] private float gravity = -22f;
+    
+    private float jumpSpeed;
 
-    [Tooltip("Upward speed applied at the moment of a jump.")]
-    [SerializeField] private float jumpSpeed = 8f;
+    [Tooltip("The max height the jump will reach. for reference, 2 is the height of the player character")]
+    [SerializeField] private float jumpHeight = 3f;
 
     [Tooltip("1 is a normal jump. 2 allows one extra jump in mid air.")]
     [SerializeField] private int maxJumps = 1;
@@ -65,6 +69,7 @@ public class PlayerMotor : MonoBehaviour
     private void Awake()
     {
         controller = GetComponent<CharacterController>();
+        jumpSpeed = CalculateJumpSpeed();
     }
 
     private void Update()
@@ -180,5 +185,15 @@ public class PlayerMotor : MonoBehaviour
         // never rotated by the player's turn.
         world.y = verticalVelocity;
         return world;
+    }
+
+    /// <summary>
+    /// Calculates the Jump speed necessary to achieve
+    /// the desired jump height
+    /// </summary>
+    private float CalculateJumpSpeed()
+    {
+        //we will use SUVAT equations
+        return Mathf.Sqrt(-2 * gravity * jumpHeight);
     }
 }
