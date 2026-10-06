@@ -2512,7 +2512,7 @@ MonoBehaviour:
   Deviation: 40
   ShotgunPrefab: {fileID: 6747371014725939774, guid: 9a940190f46c20042a5a4541b1e7d09b, type: 3}
   particleSysPrefab: {fileID: 781574001263335369, guid: f864bdf9e411fc94d9e1c9b61b712e93, type: 3}
-  camera: {fileID: 330585545}
+  Cam: {fileID: 0}
 --- !u!1 &331693871
 GameObject:
   m_ObjectHideFlags: 0
