@@ -25,8 +25,8 @@ public class Shotgun : MonoBehaviour
     public GameObject ShotgunPrefab;
     /// <summary> the assigned particle hit prefab, for decorative purposes only... and debugging</summary>
     public GameObject particleSysPrefab;
-    /// <summary> the camera, should be given a value in the editor</summary>
-    public Camera camera;
+    /// <summary> the camera, should be fine</summary>
+    public Camera Cam;
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -37,6 +37,7 @@ public class Shotgun : MonoBehaviour
         ShootAction = InputSystem.actions.FindAction("Attack");
         SetPrefab();
         TimeOfLastShot = Time.time;
+        Cam = GetComponent<Camera>();
     }
     private void SetPrefab()
     {
@@ -74,10 +75,10 @@ public class Shotgun : MonoBehaviour
             float WidthRandom = Random.Range(-Deviation, Deviation);
             float HeightRandom = Random.Range(-Deviation, Deviation);
             // get point in the middle of the screen
-            Vector3 point = new Vector3((camera.pixelWidth / 2) + WidthRandom, (camera.pixelHeight / 2) + HeightRandom, 0);
+            Vector3 point = new Vector3((Cam.pixelWidth / 2) + WidthRandom, (Cam.pixelHeight / 2) + HeightRandom, 0);
 
             // create a ray from the point in the direction of the camera
-            Ray ray = camera.ScreenPointToRay(point);
+            Ray ray = Cam.ScreenPointToRay(point);
 
 
             RaycastHit hit; // stores ray intersection information
