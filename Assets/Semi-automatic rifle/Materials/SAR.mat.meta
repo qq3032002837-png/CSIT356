@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 5dc53ca56ba15544b88b43e9bd7d15a2
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 10294
+  packageName: semi-automatic rifle
+  packageVersion: 1.1
+  assetPath: Assets/Semi-automatic rifle/Materials/SAR.mat
+  uploadId: 764671
