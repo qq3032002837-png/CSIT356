@@ -23,5 +23,6 @@ public class ExplosiveObject : MonoBehaviour
     void OnDied()
     {
         Explosion.Detonate(transform.position, ExpRadius, ExpForce, LayerToIgnore);
+        Destroy(gameObject);
     }
 }

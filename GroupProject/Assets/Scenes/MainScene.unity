@@ -16270,6 +16270,7 @@ GameObject:
   - component: {fileID: 1520308450}
   - component: {fileID: 1520308449}
   - component: {fileID: 1520308453}
+  - component: {fileID: 1520308454}
   m_Layer: 0
   m_Name: MainCamera
   m_TagString: Untagged
@@ -16432,6 +16433,20 @@ MonoBehaviour:
   ShotgunPrefab: {fileID: 979061865}
   particleSysPrefab: {fileID: 781574001263335369, guid: f864bdf9e411fc94d9e1c9b61b712e93, type: 3}
   Cam: {fileID: 1520308452}
+--- !u!114 &1520308454
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1520308447}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 65656773e28209a4c84425760399efe6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BombPlacer
+  Bomb: {fileID: 492436517226627576, guid: 7340e4adf87454f4fb23f8430c77d30a, type: 3}
+  BombHollogram: {fileID: 3421531540843510806, guid: 48aa8e43384ab424a83d0d34359ef093, type: 3}
 --- !u!1 &1528918085
 GameObject:
   m_ObjectHideFlags: 0
