@@ -90,9 +90,9 @@ public class PlayerMotor : MonoBehaviour
             && (keyboard.leftShiftKey.isPressed || keyboard.rightShiftKey.isPressed);
         if (IsRunning) 
         {
-            stats.TrySpendStamina(staminaUsage);
-        }
-        stats.RestoreStamina(0.5f);
+            stats.TrySpendStamina(staminaUsage * Time.deltaTime);
+        } else 
+        stats.RestoreStamina(1.5f * Time.deltaTime);
 
 
 
