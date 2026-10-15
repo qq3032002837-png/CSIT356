@@ -6,7 +6,7 @@ public class ZombieIdleState : IState
 {
     private readonly ZombieEnemy zombie;
     public ZombieIdleState(ZombieEnemy zombie) { this.zombie = zombie; }
-    public void Enter() { zombie.StopMoving(); }
+    public void Enter() { zombie.StopMoving(); zombie.PlayAnimation("Idle"); }
     public void Tick(float deltaTime)
     {
         if (zombie.CanSeeTarget()) zombie.ChangeState(zombie.ChaseState);
@@ -19,7 +19,7 @@ public class ZombieChaseState : IState
 {
     private readonly ZombieEnemy zombie;
     public ZombieChaseState(ZombieEnemy zombie) { this.zombie = zombie; }
-    public void Enter() { }
+    public void Enter() { zombie.PlayAnimation("Chase"); }
     public void Tick(float deltaTime)
     {
         if (!zombie.HasTarget) return;
@@ -74,6 +74,7 @@ public class ZombieDeadState : IState
         if (agent != null) agent.enabled = false;
         foreach (Collider collider in zombie.GetComponentsInChildren<Collider>())
             collider.enabled = false;
+        zombie.PlayAnimation("Death", 0.08f);
         if (Application.isPlaying) Object.Destroy(zombie.gameObject, zombie.DestroyDelay);
     }
     public void Tick(float deltaTime) { }

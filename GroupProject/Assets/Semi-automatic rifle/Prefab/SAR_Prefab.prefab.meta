@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 4bac0268bf7836941bcfe65be374a144
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 10294
+  packageName: semi-automatic rifle
+  packageVersion: 1.1
+  assetPath: Assets/Semi-automatic rifle/Prefab/SAR_Prefab.prefab
+  uploadId: 764671
