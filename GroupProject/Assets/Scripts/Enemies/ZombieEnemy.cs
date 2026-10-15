@@ -30,6 +30,11 @@ public class ZombieEnemy : MonoBehaviour
     [Header("Death")]
     [SerializeField, Min(0f)] private float destroyDelay = 2f;
 
+    [Header("Animation")]
+    [Tooltip("Animator using the ZombieChaser controller. Root motion stays disabled; NavMesh drives movement.")]
+    [SerializeField] private Animator animator;
+    [SerializeField] private AnimationClip deathAnimation;
+
     private Health health;
     private NavMeshAgent agent;
     private readonly StateMachine machine = new StateMachine();
@@ -43,12 +48,14 @@ public class ZombieEnemy : MonoBehaviour
     public float AttackRange => attackRange;
     public float AttackExitRange => attackRange + attackExitBuffer;
     public float AttackCooldown => attackCooldown;
-    public float DestroyDelay => destroyDelay;
+    public float DestroyDelay => Mathf.Max(destroyDelay, deathAnimation != null ? deathAnimation.length + 0.2f : 0f);
 
     private void Awake()
     {
         health = GetComponent<Health>();
         agent = GetComponent<NavMeshAgent>();
+        if (animator == null) animator = GetComponentInChildren<Animator>();
+        if (animator != null) animator.applyRootMotion = false;
         IdleState = new ZombieIdleState(this);
         ChaseState = new ZombieChaseState(this);
         AttackState = new ZombieAttackState(this);
@@ -76,6 +83,15 @@ public class ZombieEnemy : MonoBehaviour
     private void OnDestroy()
     {
         if (health != null) health.onDied.RemoveListener(OnDied);
+    }
+
+    // State names belong to the dedicated ZombieChaser controller. Existing unanimated
+    // test enemies can continue using this script without an Animator.
+    public void PlayAnimation(string state, float fade = 0.12f)
+    {
+        if (animator == null || animator.runtimeAnimatorController == null) return;
+        int hash = Animator.StringToHash("Base Layer." + state);
+        if (animator.HasState(0, hash)) animator.CrossFadeInFixedTime(hash, fade, 0, 0f);
     }
 
     public void SetTarget(Transform newTarget) => target = newTarget;
@@ -149,6 +165,7 @@ public class ZombieEnemy : MonoBehaviour
     public void HitTarget()
     {
         if (target == null) return;
+        PlayAnimation("Attack", 0.05f);
         // Integration: player damage is managed by the existing PlayerStats system.
         PlayerStats stats = target.GetComponentInParent<PlayerStats>();
         if (stats != null) stats.TakeDamage(attackDamage);
