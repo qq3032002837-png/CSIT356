@@ -18,6 +18,8 @@ public class Shotgun : MonoBehaviour
     [SerializeField] private int NumberOfPellets = 12;
     /// <summary> how much spread the pellets will have when they shoot (measured by pixel distance from the centre of the screen)</summary>
     [SerializeField] private float Deviation = 40f;
+    /// <summary> seconds after the shot before the pump sound plays</summary>
+    [SerializeField] private float PumpSoundDelay = 0.35f;
 
     /// <summary> the shoot action (like mouse 1 or right trigger or whatever) </summary>
     private InputAction ShootAction;
@@ -67,9 +69,14 @@ public class Shotgun : MonoBehaviour
     private void EmptyShoot()
     {
         //use this function to make a sad, heartbreaking, and dissapointing *click* noise
+        GameAudio.Play2D(GameAudio.ShotgunEmpty);
     }
     private void Bang()
     {
+        // the bang, then the pump racking the next shell in a moment later
+        GameAudio.Play2D(GameAudio.ShotgunFire, 0.8f);
+        GameAudio.Play2D(GameAudio.ShotgunPump, 0.7f, 1f, PumpSoundDelay);
+
         for (int i = 0; i < NumberOfPellets; i++) {
             //random add on values
             float WidthRandom = Random.Range(-Deviation, Deviation);
