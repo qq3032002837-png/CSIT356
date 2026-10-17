@@ -162,10 +162,12 @@ public class GameAudio : MonoBehaviour
     // cannot conflict with anyone else's scene or prefab changes.
     private static void AttachSoundComponents()
     {
-        GameObject player = GameObject.FindWithTag("Player");
+        // Found by its PlayerMotor rather than the "Player" tag, because the
+        // player prefab is not tagged.
+        PlayerMotor player = FindFirstObjectByType<PlayerMotor>();
         if (player != null && player.GetComponent<PlayerAudio>() == null)
         {
-            player.AddComponent<PlayerAudio>();
+            player.gameObject.AddComponent<PlayerAudio>();
         }
 
         foreach (GhostEnemy ghost in FindObjectsByType<GhostEnemy>(FindObjectsSortMode.None))
