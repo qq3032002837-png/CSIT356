@@ -30,6 +30,12 @@ public class PlayerMotor : MonoBehaviour
     [SerializeField] private bool allowRunning = false;
     [SerializeField] private float runSpeed = 5f;
 
+    [Tooltip("After stamina runs out, the fraction of max stamina needed before sprinting works again.")]
+    [Range(0f, 1f)]
+    [SerializeField] private float sprintRecoverFraction = 0.25f;
+
+    private bool isExhausted;
+
     public Vector3 PlanarVelocity { get; private set; }
     public bool IsRunning { get; private set; }
 
@@ -86,13 +92,27 @@ public class PlayerMotor : MonoBehaviour
     {
         Vector2 input = ReadMoveInput();
         Keyboard keyboard = Keyboard.current;
-        IsRunning = allowRunning && input.sqrMagnitude > 0.001f && keyboard != null
+        bool wantsToRun = allowRunning && input.sqrMagnitude > 0.001f && keyboard != null
             && (keyboard.leftShiftKey.isPressed || keyboard.rightShiftKey.isPressed);
-        if (IsRunning) 
+
+        // Running out of stamina forces a walk until it refills past the threshold,
+        // otherwise the player flickers between sprint and walk at 1%.
+        if (isExhausted && stats.CurrentStamina >= stats.MaxStamina * sprintRecoverFraction)
         {
-            stats.TrySpendStamina(staminaUsage * Time.deltaTime);
-        } else 
-        stats.RestoreStamina(1.5f * Time.deltaTime);
+            isExhausted = false;
+        }
+
+        IsRunning = wantsToRun && !isExhausted;
+        if (IsRunning && !stats.TrySpendStamina(staminaUsage * Time.deltaTime))
+        {
+            isExhausted = true;
+            IsRunning = false;
+        }
+
+        if (!IsRunning)
+        {
+            stats.RestoreStamina(1.5f * Time.deltaTime);
+        }
 
 
 
