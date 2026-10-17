@@ -28,12 +28,15 @@ public class GameAudio : MonoBehaviour
     public const string ZombieDeath = "ZombieDeath";
     public const string Ghost = "Ghost";
     public const string Ambience = "Ambience";
+    public const string MeleeSwing = "MeleeSwing";
+    public const string MeleeHit = "MeleeHit";
 
     /// <summary>Every set, so a test can check none of them is empty.</summary>
     public static readonly string[] AllSets =
     {
         ShotgunFire, ShotgunPump, ShotgunEmpty, Explosion, WallBreak, Footsteps,
         Hurt, Land, ZombieIdle, ZombieHurt, ZombieDeath, Ghost, Ambience,
+        MeleeSwing, MeleeHit,
     };
 
     private const string ResourcesRoot = "Audio/";
