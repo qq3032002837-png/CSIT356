@@ -4,7 +4,7 @@ using UnityEngine.AI;
 using UnityEngine.InputSystem;
 
 /// <summary>
-/// Melee: hit whatever is right in front of you with the butt of the shotgun.
+/// Melee: an elbow strike with the shotgun in hand, at whatever is right in front of you.
 ///
 /// Press V. Anything with a Health component within reach takes damage and is
 /// knocked back a little, so a zombie in your face can be pushed off without
@@ -23,15 +23,18 @@ public class ShotgunBash : MonoBehaviour
     [Tooltip("How far a hit enemy is pushed back, in metres.")]
     [SerializeField] private float knockback = 1f;
 
-    [Header("Jab animation")]
-    [SerializeField] private float jabDistance = 0.25f;
-    [SerializeField] private float jabOutTime = 0.06f;
-    [SerializeField] private float jabBackTime = 0.15f;
+    [Header("Elbow swing animation")]
+    [Tooltip("Where the gun swings to, relative to where it is held (right, up, forward) in metres.")]
+    [SerializeField] private Vector3 swingOffset = new Vector3(-0.3f, 0.05f, 0.1f);
+    [Tooltip("How far the gun turns during the swing (pitch, yaw, roll) in degrees.")]
+    [SerializeField] private Vector3 swingTurn = new Vector3(0f, -40f, 30f);
+    [SerializeField] private float swingOutTime = 0.07f;
+    [SerializeField] private float swingBackTime = 0.18f;
 
     private Camera cam;
     private Shotgun shotgun;
     private float nextBashTime;
-    private bool isJabbing;
+    private bool isSwinging;
 
     // Falls back to this object when there is no camera, as in the headless test.
     private Transform Eye => cam != null ? cam.transform : transform;
@@ -65,9 +68,9 @@ public class ShotgunBash : MonoBehaviour
     {
         GameAudio.Play2D(GameAudio.MeleeSwing, 0.8f, Random.Range(0.92f, 1.08f));
 
-        if (shotgun != null && shotgun.HeldGun != null && !isJabbing)
+        if (shotgun != null && shotgun.HeldGun != null && !isSwinging)
         {
-            StartCoroutine(Jab(shotgun.HeldGun));
+            StartCoroutine(ElbowSwing(shotgun.HeldGun));
         }
 
         Health target = FindTarget();
@@ -145,24 +148,31 @@ public class ShotgunBash : MonoBehaviour
         target.transform.position += push;
     }
 
-    private IEnumerator Jab(Transform gun)
+    // The gun sweeps left and rolls, like throwing your right elbow with it in hand.
+    private IEnumerator ElbowSwing(Transform gun)
     {
-        isJabbing = true;
-        Vector3 rest = gun.localPosition;
-        Vector3 forward = rest + Vector3.forward * jabDistance;
+        isSwinging = true;
+        Vector3 restPos = gun.localPosition;
+        Quaternion restRot = gun.localRotation;
+        Vector3 hitPos = restPos + swingOffset;
+        Quaternion hitRot = restRot * Quaternion.Euler(swingTurn);
 
-        yield return Slide(gun, rest, forward, jabOutTime);
-        yield return Slide(gun, forward, rest, jabBackTime);
+        yield return Swing(gun, restPos, restRot, hitPos, hitRot, swingOutTime);
+        yield return Swing(gun, hitPos, hitRot, restPos, restRot, swingBackTime);
 
-        gun.localPosition = rest;
-        isJabbing = false;
+        gun.localPosition = restPos;
+        gun.localRotation = restRot;
+        isSwinging = false;
     }
 
-    private static IEnumerator Slide(Transform gun, Vector3 from, Vector3 to, float duration)
+    private static IEnumerator Swing(Transform gun, Vector3 fromPos, Quaternion fromRot,
+        Vector3 toPos, Quaternion toRot, float duration)
     {
         for (float t = 0f; t < duration; t += Time.deltaTime)
         {
-            gun.localPosition = Vector3.Lerp(from, to, t / duration);
+            float k = t / duration;
+            gun.localPosition = Vector3.Lerp(fromPos, toPos, k);
+            gun.localRotation = Quaternion.Slerp(fromRot, toRot, k);
             yield return null;
         }
     }
