@@ -55,7 +55,7 @@ public class PlayerHUDController : MonoBehaviour
         }
 
         if (healthText != null)
-            healthText.text = $"Health: {Mathf.CeilToInt(playerStats.CurrentHealth)} / {Mathf.CeilToInt(playerStats.MaxHealth)}";
+            healthText.text = $"{Mathf.CeilToInt(playerStats.CurrentHealth)} / {Mathf.CeilToInt(playerStats.MaxHealth)}";
 
         // Read stamina from the same source used by movement and regeneration.
         if (staminaBar != null)
@@ -66,6 +66,6 @@ public class PlayerHUDController : MonoBehaviour
         }
 
         if (staminaText != null)
-            staminaText.text = $"Stamina: {Mathf.CeilToInt(playerStats.CurrentStamina)} / {Mathf.CeilToInt(playerStats.MaxStamina)}";
+            staminaText.text = $"{Mathf.CeilToInt(playerStats.CurrentStamina)} / {Mathf.CeilToInt(playerStats.MaxStamina)}";
     }
 }

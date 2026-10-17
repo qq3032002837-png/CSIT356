@@ -59,6 +59,7 @@ public class PlayerMotor : MonoBehaviour
     [SerializeField] private float maxFallSpeed = 55f;
 
     private CharacterController controller;
+    private PlayerStats stats;
 
     // Carried between frames. This is the whole reason jumping works.
     private float verticalVelocity;
@@ -66,6 +67,7 @@ public class PlayerMotor : MonoBehaviour
     private int jumpsUsed;
     private float lastGroundedTime;
     private bool wasGroundedLastFrame;
+    private float staminaUsage = 2.5f;
 
     /// <summary>True while the controller reports contact with the ground.</summary>
     public bool IsGrounded { get { return controller != null && controller.isGrounded; } }
@@ -75,6 +77,7 @@ public class PlayerMotor : MonoBehaviour
 
     private void Awake()
     {
+        stats = GetComponent<PlayerStats>();
         controller = GetComponent<CharacterController>();
         jumpSpeed = CalculateJumpSpeed();
     }
@@ -85,6 +88,13 @@ public class PlayerMotor : MonoBehaviour
         Keyboard keyboard = Keyboard.current;
         IsRunning = allowRunning && input.sqrMagnitude > 0.001f && keyboard != null
             && (keyboard.leftShiftKey.isPressed || keyboard.rightShiftKey.isPressed);
+        if (IsRunning) 
+        {
+            stats.TrySpendStamina(staminaUsage * Time.deltaTime);
+        } else 
+        stats.RestoreStamina(1.5f * Time.deltaTime);
+
+
 
         UpdateGroundState();
         HandleJumpInput();
@@ -174,6 +184,7 @@ public class PlayerMotor : MonoBehaviour
         {
             verticalVelocity = jumpSpeed;
             jumpsUsed++;
+            stats.TrySpendStamina(10);
         }
     }
 
