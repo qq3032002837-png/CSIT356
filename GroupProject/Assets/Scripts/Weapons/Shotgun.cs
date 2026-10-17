@@ -25,6 +25,8 @@ public class Shotgun : MonoBehaviour
     private InputAction ShootAction;
     /// <summary> the assigned shotgun prefab, for decorative purposes only</summary>
     public GameObject ShotgunPrefab;
+    /// <summary> where the gun sits relative to the camera (right, up, forward) in metres</summary>
+    [SerializeField] private Vector3 GunHoldPosition = new Vector3(0.162f, -0.144f, 0.702f);
     /// <summary> the assigned particle hit prefab, for decorative purposes only... and debugging</summary>
     public GameObject particleSysPrefab;
     /// <summary> the camera, should be fine</summary>
@@ -43,7 +45,9 @@ public class Shotgun : MonoBehaviour
     }
     private void SetPrefab()
     {
-       Instantiate(ShotgunPrefab, gameObject.transform); //is this how it works?
+       GameObject gun = Instantiate(ShotgunPrefab, gameObject.transform); //is this how it works?
+       // without this the gun keeps the template's position, which floats it 0.7m in front of the camera
+       gun.transform.localPosition = GunHoldPosition;
     }
     // Update is called once per frame
     void Update()
