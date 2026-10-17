@@ -27,6 +27,8 @@ public class Shotgun : MonoBehaviour
     public GameObject ShotgunPrefab;
     /// <summary> where the gun sits relative to the camera (right, up, forward) in metres</summary>
     [SerializeField] private Vector3 GunHoldPosition = new Vector3(0.162f, -0.144f, 0.702f);
+    /// <summary> the gun model in the player's hands, so the melee bash can animate it</summary>
+    public Transform HeldGun { get; private set; }
     /// <summary> the assigned particle hit prefab, for decorative purposes only... and debugging</summary>
     public GameObject particleSysPrefab;
     /// <summary> the camera, should be fine</summary>
@@ -42,12 +44,15 @@ public class Shotgun : MonoBehaviour
         SetPrefab();
         TimeOfLastShot = Time.time;
         Cam = GetComponent<Camera>();
+        // melee bash on V, lives in its own script
+        if (GetComponent<ShotgunBash>() == null) gameObject.AddComponent<ShotgunBash>();
     }
     private void SetPrefab()
     {
        GameObject gun = Instantiate(ShotgunPrefab, gameObject.transform); //is this how it works?
        // without this the gun keeps the template's position, which floats it 0.7m in front of the camera
        gun.transform.localPosition = GunHoldPosition;
+       HeldGun = gun.transform;
     }
     // Update is called once per frame
     void Update()
