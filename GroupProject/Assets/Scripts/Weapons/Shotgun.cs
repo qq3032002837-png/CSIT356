@@ -125,6 +125,7 @@ public class Shotgun : MonoBehaviour
     public void AddAmmo(int add)
     {
         Ammo += add;
+        GameAudio.Play2D(GameAudio.ShotgunPump, 0.3f, 0.7f);
         // ...what he said
     }
 }
