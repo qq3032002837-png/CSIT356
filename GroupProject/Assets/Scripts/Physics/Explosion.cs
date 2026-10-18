@@ -22,6 +22,8 @@ public static class Explosion
     /// <param name="affects">Which layers the blast can touch.</param>
     public static void Detonate(Vector3 origin, float radius, float force, LayerMask affects)
     {
+        GameAudio.PlayAt(GameAudio.Explosion, origin);
+
         int hitCount = UnityEngine.Physics.OverlapSphereNonAlloc(origin, radius, Hits, affects);
 
         for (int i = 0; i < hitCount; i++)

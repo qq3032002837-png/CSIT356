@@ -18,11 +18,15 @@ public class Shotgun : MonoBehaviour
     [SerializeField] private int NumberOfPellets = 12;
     /// <summary> how much spread the pellets will have when they shoot (measured by pixel distance from the centre of the screen)</summary>
     [SerializeField] private float Deviation = 40f;
+    /// <summary> seconds after the shot before the pump sound plays</summary>
+    [SerializeField] private float PumpSoundDelay = 0.35f;
 
     /// <summary> the shoot action (like mouse 1 or right trigger or whatever) </summary>
     private InputAction ShootAction;
     /// <summary> the assigned shotgun prefab, for decorative purposes only</summary>
     public GameObject ShotgunPrefab;
+    /// <summary> where the gun sits relative to the camera (right, up, forward) in metres</summary>
+    [SerializeField] private Vector3 GunHoldPosition = new Vector3(0.162f, -0.144f, 0.702f);
     /// <summary> the assigned particle hit prefab, for decorative purposes only... and debugging</summary>
     public GameObject particleSysPrefab;
     /// <summary> the camera, should be fine</summary>
@@ -41,7 +45,9 @@ public class Shotgun : MonoBehaviour
     }
     private void SetPrefab()
     {
-       Instantiate(ShotgunPrefab, gameObject.transform); //is this how it works?
+       GameObject gun = Instantiate(ShotgunPrefab, gameObject.transform); //is this how it works?
+       // without this the gun keeps the template's position, which floats it 0.7m in front of the camera
+       gun.transform.localPosition = GunHoldPosition;
     }
     // Update is called once per frame
     void Update()
@@ -67,9 +73,14 @@ public class Shotgun : MonoBehaviour
     private void EmptyShoot()
     {
         //use this function to make a sad, heartbreaking, and dissapointing *click* noise
+        GameAudio.Play2D(GameAudio.ShotgunEmpty);
     }
     private void Bang()
     {
+        // the bang, then the pump racking the next shell in a moment later
+        GameAudio.Play2D(GameAudio.ShotgunFire, 0.8f);
+        GameAudio.Play2D(GameAudio.ShotgunPump, 0.7f, 1f, PumpSoundDelay);
+
         for (int i = 0; i < NumberOfPellets; i++) {
             //random add on values
             float WidthRandom = Random.Range(-Deviation, Deviation);

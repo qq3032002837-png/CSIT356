@@ -43,6 +43,7 @@ public class Breakable : MonoBehaviour
         }
 
         hasShattered = true;
+        GameAudio.PlayAt(GameAudio.WallBreak, transform.position);
 
         if (fracturedPrefab == null)
         {

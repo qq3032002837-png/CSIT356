@@ -22,6 +22,12 @@ public class PlayerMotor : MonoBehaviour
     [Tooltip("Ground speed in metres per second.")]
     [SerializeField] private float walkSpeed = 5f;
 
+    [Header("Movement Inertia")]
+    [SerializeField] private float acceleration = 12f;
+    [SerializeField] private float deceleration = 8f;
+
+private Vector3 horizontalVelocity;
+
     [Tooltip("How much control the player keeps while airborne. 0 is none, 1 is full.")]
     [Range(0f, 1f)]
     [SerializeField] private float airControl = 0.4f;
@@ -59,7 +65,13 @@ public class PlayerMotor : MonoBehaviour
     [SerializeField] private float maxFallSpeed = 55f;
 
     private CharacterController controller;
+    private PlayerCrouch crouch;
+    // Dash integration: reference the independent dash controller.
+    private PlayerDash dash;
+    // Stamina integration: use the existing player resource data.
     private PlayerStats stats;
+    [SerializeField, Min(0f)] private float jumpStaminaCost = 10f;
+    [SerializeField, Min(0f)] private float sprintStaminaPerSecond = 12f;
 
     // Carried between frames. This is the whole reason jumping works.
     private float verticalVelocity;
@@ -67,7 +79,6 @@ public class PlayerMotor : MonoBehaviour
     private int jumpsUsed;
     private float lastGroundedTime;
     private bool wasGroundedLastFrame;
-    private float staminaUsage = 2.5f;
 
     /// <summary>True while the controller reports contact with the ground.</summary>
     public bool IsGrounded { get { return controller != null && controller.isGrounded; } }
@@ -77,8 +88,12 @@ public class PlayerMotor : MonoBehaviour
 
     private void Awake()
     {
-        stats = GetComponent<PlayerStats>();
         controller = GetComponent<CharacterController>();
+        crouch = GetComponent<PlayerCrouch>();
+        // Dash integration: cache the dash controller once during initialization.
+        dash = GetComponent<PlayerDash>();
+        // Stamina integration: cache the existing stats component once.
+        stats = GetComponent<PlayerStats>();
         jumpSpeed = CalculateJumpSpeed();
     }
 
@@ -87,20 +102,48 @@ public class PlayerMotor : MonoBehaviour
         Vector2 input = ReadMoveInput();
         Keyboard keyboard = Keyboard.current;
         IsRunning = allowRunning && input.sqrMagnitude > 0.001f && keyboard != null
+            && (crouch == null || !crouch.IsCrouching)
+            && !(keyboard.leftCtrlKey.isPressed || keyboard.rightCtrlKey.isPressed)
             && (keyboard.leftShiftKey.isPressed || keyboard.rightShiftKey.isPressed);
-        if (IsRunning) 
-        {
-            stats.TrySpendStamina(staminaUsage * Time.deltaTime);
-        } else 
-        stats.RestoreStamina(1.5f * Time.deltaTime);
-
-
 
         UpdateGroundState();
+
+        // Dash integration: update an active dash and accept Alt only when grounded and standing.
+        if (dash != null)
+        {
+            bool dashJustFinished = dash.Tick(Time.deltaTime);
+            if (dashJustFinished)
+            {
+                // Resume normal movement from walking speed in the last dash direction.
+                horizontalVelocity = dash.DashDirection * walkSpeed;
+            }
+            if (keyboard != null && keyboard.leftAltKey.wasPressedThisFrame &&
+                controller.isGrounded && (crouch == null || !crouch.IsCrouching) &&
+                !keyboard.leftCtrlKey.isPressed && !keyboard.rightCtrlKey.isPressed &&
+                dash.TryStartDash(input, transform))
+            {
+                // Keep post-dash momentum consistent with the selected direction.
+                horizontalVelocity = dash.DashDirection * walkSpeed;
+                IsRunning = false;
+            }
+        }
+
+        // Stamina integration: sprint only while grounded and able to pay its per-frame cost.
+        if (IsRunning && controller.isGrounded && (dash == null || !dash.IsDashing) &&
+            stats != null && !stats.TrySpendStamina(sprintStaminaPerSecond * Time.deltaTime))
+        {
+            IsRunning = false;
+        }
+
+        // Calculate ground movement before taking off
+
+        Vector3 movement = BuildMovement(input);
+
         HandleJumpInput();
         ApplyGravity();
 
-        Vector3 movement = BuildMovement(input);
+        // Update the vertical part after processing the jump
+        movement.y = verticalVelocity;
         Vector3 before = transform.position;
         controller.Move(movement * Time.deltaTime);
         Vector3 displacement = transform.position - before;
@@ -171,7 +214,10 @@ public class PlayerMotor : MonoBehaviour
     private void HandleJumpInput()
     {
         Keyboard keyboard = Keyboard.current;
-        if (keyboard == null || !keyboard.spaceKey.wasPressedThisFrame)
+        // Dash integration: jumping is unavailable during an active dash.
+        if ((dash != null && dash.IsDashing) || keyboard == null || !keyboard.spaceKey.wasPressedThisFrame
+            || (crouch != null && crouch.IsCrouching)
+            || keyboard.leftCtrlKey.isPressed || keyboard.rightCtrlKey.isPressed)
         {
             return;
         }
@@ -182,9 +228,12 @@ public class PlayerMotor : MonoBehaviour
 
         if (hasGroundJump || jumpsUsed < maxJumps)
         {
+            // Stamina integration: spend stamina only when a jump is actually performed.
+            if (stats != null && !stats.TrySpendStamina(jumpStaminaCost))
+                return;
+
             verticalVelocity = jumpSpeed;
             jumpsUsed++;
-            stats.TrySpendStamina(10);
         }
     }
 
@@ -196,20 +245,38 @@ public class PlayerMotor : MonoBehaviour
 
     private Vector3 BuildMovement(Vector2 input)
     {
-        Vector3 local = new Vector3(input.x, 0f, input.y) * (IsRunning ? runSpeed : walkSpeed);
-
-        // Local to world, so the player moves relative to the way they face.
-        Vector3 world = transform.TransformDirection(local);
-
-        if (!controller.isGrounded)
+        // Dash integration: substitute horizontal dash velocity while preserving gravity.
+        if (dash != null && dash.IsDashing)
         {
-            world *= airControl;
+            Vector3 dashMovement = dash.DashVelocity;
+            dashMovement.y = verticalVelocity;
+            return dashMovement;
+        }
+    // Only allow horizontal acceleration while grounded
+        if (controller.isGrounded)
+        {
+            Vector3 localInput = new Vector3(input.x, 0f, input.y);
+
+            Vector3 targetVelocity =
+                transform.TransformDirection(localInput) *
+                (crouch != null && crouch.IsCrouching ? crouch.CrouchSpeed : (IsRunning ? runSpeed : walkSpeed));
+
+            float currentAcceleration =
+                input.sqrMagnitude > 0.01f ? acceleration : deceleration;
+
+            horizontalVelocity = Vector3.MoveTowards(
+                horizontalVelocity,
+                targetVelocity,
+                currentAcceleration * Time.deltaTime
+            );
         }
 
-        // Vertical is set after the transform, so it stays in world space and is
-        // never rotated by the player's turn.
-        world.y = verticalVelocity;
-        return world;
+    // In the air, horizontalVelocity stays unchanged.
+    // This locks the movement direction during jumping/falling.
+        Vector3 movement = horizontalVelocity;
+        movement.y = verticalVelocity;
+
+        return movement;
     }
 
     /// <summary>
