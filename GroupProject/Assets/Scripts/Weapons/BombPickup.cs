@@ -6,6 +6,8 @@ public class BombPickup : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     //the trigger collider of the object
 
+    public GameObject ghostenemy;
+
     private void OnTriggerEnter(Collider other)
     {
         GameObject OtherGameObj = other.gameObject;
@@ -13,6 +15,7 @@ public class BombPickup : MonoBehaviour
         {
             BombPlacer bomplc = OtherGameObj.GetComponentInChildren<BombPlacer>();
             bomplc.enabled = true;
+            Instantiate(ghostenemy);
             Destroy(gameObject);
         }
         catch 
