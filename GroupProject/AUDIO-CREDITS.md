@@ -11,7 +11,7 @@ Everything is CC0 (no credit required) except the shotgun shot, which is CC-BY 3
 | Footsteps, WallBreak, Land, MeleeHit | footstep_*, wall_break_*, jump_land, melee_hit_01 to 03 | "Impact Sounds", Kenney, kenney.nl/assets/impact-sounds | CC0 |
 | MeleeSwing | melee_swing.ogg | "RPG Audio", Kenney, kenney.nl/assets/rpg-audio | CC0 |
 | Explosion | explosion.wav (two clips layered) | "Explosion", TinyWorlds, opengameart.org/content/explosion-0, and "Synthesized explosion", qubodup, opengameart.org/content/synthesized-explosion | CC0 |
-| BombFuse | bomb_fuse.wav (looped to 3 s) | "Simple Fuse Sound", themightyglider, opengameart.org/content/simple-fuse-sound (from j1987, freesound.org/people/j1987/sounds/111325) | CC0 |
+| BombFuse | bomb_fuse.wav | Made by us: generated from filtered noise and crackles (no third-party audio) | ours |
 | Hurt | hurt_01 to hurt_06 | "Hurt Sound Effects", EZduzziteh, opengameart.org/content/hurt-sound-effects | CC0 |
 | ZombieIdle, ZombieHurt | zombienoise1-3, fastzombie1 | "Zombie noises and moans", ianzazz, opengameart.org/content/zombie-noises-and-moans | CC0 |
 | ZombieIdle, ZombieDeath | undead-1 to undead-4 | "Undead Moans", AntumDeluge, opengameart.org/node/81246 | CC0 |
