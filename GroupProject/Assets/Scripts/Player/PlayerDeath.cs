@@ -18,6 +18,7 @@ public class PlayerDeath : MonoBehaviour
 
     private PlayerStats stats;
     private PlayerMotor motor;
+    private PlayerCrouch crouch;
     // Respawn integration: keep the view and cursor usable during the death screen.
     private CharacterController controller;
     private MouseLook[] mouseLookComponents;
@@ -31,6 +32,7 @@ public class PlayerDeath : MonoBehaviour
         // Read the existing health value and movement components on the player.
         stats = GetComponent<PlayerStats>();
         motor = GetComponent<PlayerMotor>();
+        crouch = GetComponent<PlayerCrouch>();
         // Respawn integration: cache the initial spawn and camera controls.
         controller = GetComponent<CharacterController>();
         mouseLookComponents = GetComponentsInChildren<MouseLook>(true);
@@ -64,10 +66,16 @@ public class PlayerDeath : MonoBehaviour
                 mouseLook.enabled = false;
         }
 
-        // PlayerMotor drives walking, sprinting, jumping.
+        // PlayerMotor drives walking, sprinting, jumping and dashing.
         if (motor != null)
         {
             motor.enabled = false;
+        }
+
+        // Prevent crouch input from changing the player collider after death.
+        if (crouch != null)
+        {
+            crouch.enabled = false;
         }
 
         // Show the configured YOU DIED overlay while leaving the camera active.
@@ -105,6 +113,8 @@ public class PlayerDeath : MonoBehaviour
         IsDead = false;
         if (motor != null)
             motor.enabled = true;
+        if (crouch != null)
+            crouch.enabled = true;
         foreach (MouseLook mouseLook in mouseLookComponents)
         {
             if (mouseLook != null)
