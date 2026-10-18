@@ -16,6 +16,8 @@ public class ExplosiveObject : MonoBehaviour
         health = GetComponent<Health>();
         health.onDied.AddListener(OnDied);
         LayerToBlowUp = LayerMask.GetMask("BreakableWall");
+        // fuse hiss while the countdown runs, stops when the bomb is destroyed
+        GameAudio.AttachLoop(gameObject, GameAudio.BombFuse, 0.8f);
     }
 
     // Update is called once per frame
