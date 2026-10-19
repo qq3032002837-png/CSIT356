@@ -7,6 +7,7 @@ public class BombPickup : MonoBehaviour
     //the trigger collider of the object
 
     public GameObject ghostenemy;
+    public Transform playertransform;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -15,7 +16,8 @@ public class BombPickup : MonoBehaviour
         {
             BombPlacer bomplc = OtherGameObj.GetComponentInChildren<BombPlacer>();
             bomplc.enabled = true;
-            Instantiate(ghostenemy);
+            GhostEnemy GhostScript = Instantiate(ghostenemy).GetComponent<GhostEnemy>();
+            GhostScript.SetTarget(playertransform);
             Destroy(gameObject);
         }
         catch 
