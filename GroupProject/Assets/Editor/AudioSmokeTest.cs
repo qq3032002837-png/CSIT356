@@ -11,7 +11,7 @@ public static class AudioSmokeTest
     private static readonly string[] SpatialSets =
     {
         GameAudio.Ghost, GameAudio.ZombieIdle, GameAudio.ZombieHurt,
-        GameAudio.ZombieDeath, GameAudio.Explosion, GameAudio.WallBreak,
+        GameAudio.ZombieDeath, GameAudio.Explosion, GameAudio.WallBreak, GameAudio.BombFuse,
     };
 
     public static void Run()
